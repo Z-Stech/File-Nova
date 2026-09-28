@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FileFixer - Free Image, PDF, Scanner & Media Tools</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f5f7fb;
+    color:#172033;
+}
+
+header{
+    background:#ffffff;
+    border-bottom:1px solid #ddd;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.nav{
+    max-width:1200px;
+    margin:auto;
+    padding:15px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#4f46e5;
+}
+
+nav a{
+    margin-left:18px;
+    text-decoration:none;
+    color:#333;
+    cursor:pointer;
+}
+
+.login-btn{
+    background:#4f46e5;
+    color:white;
+    border:0;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.hero{
+    text-align:center;
+    padding:70px 20px 50px;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.hero p{
+    color:#667085;
+    max-width:650px;
+    margin:auto;
+    line-height:1.6;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.section-title{
+    margin:35px 0 18px;
+    font-size:27px;
+}
+
+.tools{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+}
+
+.tool{
+    background:white;
+    padding:24px;
+    border-radius:14px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 3px 15px rgba(0,0,0,.04);
+}
+
+.tool h3{
+    margin-bottom:8px;
+}
+
+.tool p{
+    color:#667085;
+    font-size:14px;
+    min-height:42px;
+}
+
+.tool button{
+    width:100%;
+    margin-top:15px;
+    padding:11px;
+    border:0;
+    border-radius:8px;
+    background:#4f46e5;
+    color:white;
+    cursor:pointer;
+}
+
+.locked{
+    position:relative;
+}
+
+.locked::after{
+    content:"🔒 Login required";
+    display:block;
+    margin-top:10px;
+    color:#e11d48;
+    font-size:13px;
+}
+
+.workspace{
+    display:none;
+    background:white;
+    padding:25px;
+    margin:30px auto;
+    max-width:800px;
+    border-radius:15px;
+    border:1px solid #ddd;
+}
+
+.workspace.active{
+    display:block;
+}
+
+input[type="file"],
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select{
+    width:100%;
+    padding:12px;
+    margin:8px 0 14px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+.action{
+    padding:11px 18px;
+    background:#4f46e5;
+    color:white;
+    border:0;
+    border-radius:8px;
+    cursor:pointer;
+    margin:5px;
+}
+
+.secondary{
+    background:#667085;
+}
+
+.preview{
+    max-width:100%;
+    max-height:450px;
+    margin:15px auto;
+    display:block;
+}
+
+.result{
+    margin-top:15px;
+    padding:15px;
+    background:#f3f4f6;
+    border-radius:10px;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:500;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-box{
+    background:white;
+    width:min(420px,92%);
+    padding:30px;
+    border-radius:15px;
+}
+
+.modal-box h2{
+    margin-bottom:20px;
+}
+
+.close{
+    float:right;
+    cursor:pointer;
+    font-size:22px;
+}
+
+footer{
+    margin-top:70px;
+    background:#111827;
+    color:white;
+    padding:40px 20px;
+    text-align:center;
+}
+
+@media(max-width:600px){
+    .hero h1{
+        font-size:32px;
+    }
+
+    nav a{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="nav">
+
+<div class="logo">
+File<span>Fixer</span>
+</div>
+
+<nav>
+<a onclick="scrollToSection('images')">Images</a>
+<a onclick="scrollToSection('pdf')">PDF</a>
+<a onclick="scrollToSection('scanner')">Scanner</a>
+<a onclick="scrollToSection('advanced')">Advanced</a>
+</nav>
+
+<div>
+<button class="login-btn" id="accountButton" onclick="openLogin()">
+Login
+</button>
+</div>
+
+</div>
+</header>
+
+
+<section class="hero">
+
+<h1>Free Online File Tools</h1>
+
+<p>
+Compress, resize, convert and manage your images and PDFs.
+Scan documents directly from your device.
+Advanced video, QR, privacy and conversion tools are available after login.
+</p>
+
+</section>
+
+
+<div class="container">
+
+
+<!-- IMAGE TOOLS -->
+
+<h2 class="section-title" id="images">🖼️ Image Tools</h2>
+
+<div class="tools">
+
+<div class="tool">
+<h3>Image Compressor</h3>
+<p>Reduce image file size while keeping good quality.</p>
+<button onclick="openTool('compress')">Open Tool</button>
+</div>
+
+<div class="tool">
+<h3>Image Resizer</h3>
+<p>Resize an image to your desired dimensions.</p>
+<button onclick="openTool('resize')">Open Tool</button>
+</div>
+
+<div class="tool">
+<h3>Image Converter</h3>
+<p>Convert JPG, PNG and WebP images.</p>
+<button onclick="openTool('convert')">Open Tool</button>
+</div>
+
+<div class="tool">
+<h3>Image Cropper</h3>
+<p>Crop and download your image.</p>
+<button onclick="openTool('crop')">Open Tool</button>
+</div>
+
+<div class="tool">
+<h3>Image Enhancer</h3>
+<p>Improve brightness, contrast and sharpness.</p>
+<button onclick="openTool('enhance')">Open Tool</button>
+</div>
+
+<div class="tool">
+<h3>Image → PDF</h3>
+<p>Convert one or multiple images into PDF.</p>
+<button onclick="openTool('imagepdf')">Open Tool</button>
+</div>
+
+</div>
+
+
+<!-- PDF -->
+
+<h2 class="section-title" id="pdf">📄 PDF Tools</h2>
+
+<div class="tools">
+
+<div class="tool">
+<h3>Images → PDF</h3>
+<p>Create a PDF from your images.</p>
+<button onclick="openTool('imagepdf')">Open Tool</button>
+</div>
+
+<div class="tool">
+<h3>PDF Tools</h3>
+<p>Prepare PDF processing tools for your documents.</p>
+<button onclick="openTool('pdf')">Open Tool</button>
+</div>
+
+<div class="tool">
+<h3>PDF Compressor</h3>
+<p>Reduce PDF size.</p>
+<button onclick="openTool('pdf')">Open Tool</button>
+</div>
+
+<div class="tool">
+<h3>PDF Page Manager</h3>
+<p>Manage and organize PDF pages.</p>
+<button onclick="openTool('pdf')">Open Tool</button>
+</div>
+
+</div>
+
+
+<!-- SCANNER -->
+
+<h2 class="section-title" id="scanner">📷 Document Scanner</h2>
+
+<div class="tools">
+
+<div class="tool">
+<h3>Document Scanner</h3>
+<p>Take or upload a document image and save it as a PDF.</p>
+<button onclick="openTool('scanner')">Open Scanner</button>
+</div>
+
+</div>
+
+
+<!-- ADVANCED -->
+
+<h2 class="section-title" id="advanced">🔐 Advanced Tools</h2>
+
+<div class="tools">
+
+<div class="tool locked">
+<h3>🎥 Video Tools</h3>
+<p>Compress, resize, convert, trim and create GIFs.</p>
+<button onclick="protectedTool('video')">Open Tool</button>
+</div>
+
+<div class="tool locked">
+<h3>🔗 QR Generator</h3>
+<p>Create QR codes from links, Wi-Fi, email and more.</p>
+<button onclick="protectedTool('qr')">Open Tool</button>
+</div>
+
+<div class="tool locked">
+<h3>🔒 Privacy Tools</h3>
+<p>Metadata removal and privacy-related file utilities.</p>
+<button onclick="protectedTool('privacy')">Open Tool</button>
+</div>
+
+<div class="tool locked">
+<h3>🔄 All-in-One Converter</h3>
+<p>Convert supported images, PDFs, video and audio formats.</p>
+<button onclick="protectedTool('converter')">Open Tool</button>
+</div>
+
+</div>
+
+
+<!-- WORKSPACE -->
+
+<div id="workspace" class="workspace">
+
+<h2 id="workspaceTitle">Tool</h2>
+
+<div id="workspaceContent"></div>
+
+</div>
+
+</div>
+
+
+<footer>
+
+<p>© 2026 FileFixer — Online File Tools</p>
+
+<p style="margin-top:10px;color:#aaa;">
+Fast • Simple • Privacy-focused
+</p>
+
+</footer>
+
+
+<!-- LOGIN MODAL -->
+
+<div class="modal" id="loginModal">
+
+<div class="modal-box">
+
+<span class="close" onclick="closeLogin()">×</span>
+
+<h2>Account Login</h2>
+
+<p style="color:#667085;margin-bottom:15px;">
+Login to use advanced tools.
+</p>
+
+<input id="email" type="email" placeholder="Email">
+
+<input id="password" type="password" placeholder="Password">
+
+<button class="action" onclick="login()">Login</button>
+
+<button class="action secondary" onclick="signup()">Create Account</button>
+
+<p id="loginMessage" style="margin-top:15px;"></p>
+
+</div>
+
+</div>
+
+
+<!-- LIBRARIES -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+
+<script>
+
+let loggedIn = localStorage.getItem("filefixer_loggedin") === "true";
+let selectedTool = null;
+
+updateAccountButton();
+
+
+function updateAccountButton(){
+
+const btn = document.getElementById("accountButton");
+
+if(loggedIn){
+
+btn.textContent = "Logout";
+btn.onclick = logout;
+
+}else{
+
+btn.textContent = "Login";
+btn.onclick = openLogin;
+
+}
+
+}
+
+
+function openLogin(){
+
+document.getElementById("loginModal").classList.add("active");
+
+}
+
+
+function closeLogin(){
+
+document.getElementById("loginModal").classList.remove("active");
+
+}
+
+
+function login(){
+
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+if(!email || !password){
+
+document.getElementById("loginMessage").textContent =
+"Please enter email and password.";
+
+return;
+
+}
+
+/*
+Demo login only.
+A real website needs a secure backend.
+*/
+
+localStorage.setItem("filefixer_loggedin","true");
+
+loggedIn = true;
+
+updateAccountButton();
+
+closeLogin();
+
+if(selectedTool){
+
+showAdvancedTool(selectedTool);
+
+}
+
+}
+
+
+function signup(){
+
+alert(
+"Demo signup selected.\n\n" +
+"For the production version, we will connect this to a real secure authentication system."
+);
+
+}
+
+
+function logout(){
+
+localStorage.removeItem("filefixer_loggedin");
+
+loggedIn = false;
+
+updateAccountButton();
+
+alert("You have been logged out.");
+
+}
+
+
+function protectedTool(tool){
+
+selectedTool = tool;
+
+if(!loggedIn){
+
+openLogin();
+
+return;
+
+}
+
+showAdvancedTool(tool);
+
+}
+
+
+function showAdvancedTool(tool){
+
+const workspace = document.getElementById("workspace");
+const title = document.getElementById("workspaceTitle");
+const content = document.getElementById("workspaceContent");
+
+workspace.classList.add("active");
+
+if(tool === "qr"){
+
+title.textContent = "🔗 QR Code Generator";
+
+content.innerHTML = `
+
+<input id="qrText" type="text"
+placeholder="Enter your link or text">
+
+<button class="action" onclick="generateQR()">
+Generate QR
+</button>
+
+<canvas id="qrCanvas"></canvas>
+
+<br>
+
+<button class="action" onclick="downloadQR()">
+Download QR
+</button>
+
+`;
+
+}
+
+else if(tool === "video"){
+
+title.textContent = "🎥 Video Tools";
+
+content.innerHTML = `
+
+<input type="file" accept="video/*">
+
+<div class="result">
+
+<h3>Video Tools</h3>
+
+<p>
+The production version can connect FFmpeg/WebAssembly
+for browser-based video processing.
+</p>
+
+<br>
+
+<button class="action">
+Compress Video
+</button>
+
+<button class="action">
+Resize Video
+</button>
+
+<button class="action">
+Convert Video
+</button>
+
+<button class="action">
+Trim Video
+</button>
+
+</div>
+
+`;
+
+}
+
+else if(tool === "privacy"){
+
+title.textContent = "🔒 Privacy Tools";
+
+content.innerHTML = `
+
+<input type="file" id="privacyFile">
+
+<button class="action" onclick="removeMetadataDemo()">
+Remove Metadata
+</button>
+
+<div id="privacyResult" class="result"></div>
+
+`;
+
+}
+
+else if(tool === "converter"){
+
+title.textContent = "🔄 All-in-One Converter";
+
+content.innerHTML = `
+
+<input type="file" id="converterFile">
+
+<select id="converterFormat">
+
+<option>Choose output format</option>
+<option>JPG</option>
+<option>PNG</option>
+<option>WEBP</option>
+<option>PDF</option>
+
+</select>
+
+<button class="action" onclick="converterDemo()">
+Convert
+</button>
+
+<div id="converterResult" class="result"></div>
+
+`;
+
+}
+
+}
+
+
+function openTool(tool){
+
+const workspace = document.getElementById("workspace");
+const title = document.getElementById("workspaceTitle");
+const content = document.getElementById("workspaceContent");
+
+workspace.classList.add("active");
+
+
+if(tool === "compress"){
+
+title.textContent = "🖼️ Image Compressor";
+
+content.innerHTML = `
+
+<input type="file" id="compressFile" accept="image/*">
+
+<label>Quality</label>
+
+<input
+type="range"
+id="quality"
+min="10"
+max="100"
+value="70"
+>
+
+<button class="action" onclick="compressImage()">
+Compress Image
+</button>
+
+<div id="compressResult"></div>
+
+`;
+
+}
+
+
+else if(tool === "resize"){
+
+title.textContent = "📐 Image Resizer";
+
+content.innerHTML = `
+
+<input type="file" id="resizeFile" accept="image/*">
+
+<input type="number" id="resizeWidth"
+placeholder="Width">
+
+<input type="number" id="resizeHeight"
+placeholder="Height">
+
+<button class="action" onclick="resizeImage()">
+Resize
+</button>
+
+<div id="resizeResult"></div>
+
+`;
+
+}
+
+
+else if(tool === "convert"){
+
+title.textContent = "🔄 Image Converter";
+
+content.innerHTML = `
+
+<input type="file" id="convertFile" accept="image/*">
+
+<select id="convertFormat">
+
+<option value="image/jpeg">JPG</option>
+<option value="image/png">PNG</option>
+<option value="image/webp">WEBP</option>
+
+</select>
+
+<button class="action" onclick="convertImage()">
+Convert
+</button>
+
+<div id="convertResult"></div>
+
+`;
+
+}
+
+
+else if(tool === "crop"){
+
+title.textContent = "✂️ Image Cropper";
+
+content.innerHTML = `
+
+<input type="file" id="cropFile" accept="image/*">
+
+<input type="number" id="cropWidth"
+placeholder="Crop width">
+
+<input type="number" id="cropHeight"
+placeholder="Crop height">
+
+<button class="action" onclick="cropImage()">
+Crop
+</button>
+
+<div id="cropResult"></div>
+
+`;
+
+}
+
+
+else if(tool === "enhance"){
+
+title.textContent = "✨ Image Enhancer";
+
+content.innerHTML = `
+
+<input type="file" id="enhanceFile" accept="image/*">
+
+<label>Brightness</label>
+
+<input type="range" id="brightness"
+min="50" max="150" value="100">
+
+<label>Contrast</label>
+
+<input type="range" id="contrast"
+min="50" max="150" value="110">
+
+<button class="action" onclick="enhanceImage()">
+Enhance
+</button>
+
+<div id="enhanceResult"></div>
+
+`;
+
+}
+
+
+else if(tool === "imagepdf"){
+
+title.textContent = "📄 Images → PDF";
+
+content.innerHTML = `
+
+<input type="file" id="pdfImages"
+accept="image/*"
+multiple>
+
+<button class="action" onclick="imagesToPDF()">
+Create PDF
+</button>
+
+<div id="pdfResult"></div>
+
+`;
+
+}
+
+
+else if(tool === "scanner"){
+
+title.textContent = "📷 Document Scanner";
+
+content.innerHTML = `
+
+<input type="file"
+id="scannerFile"
+accept="image/*"
+capture="environment">
+
+<p style="margin:10px 0;color:#667085;">
+On a phone, the camera option may appear automatically.
+</p>
+
+<button class="action" onclick="scanDocument()">
+Process Scan
+</button>
+
+<div id="scannerResult"></div>
+
+`;
+
+}
+
+
+else if(tool === "pdf"){
+
+title.textContent = "📄 PDF Tools";
+
+content.innerHTML = `
+
+<input type="file" accept="application/pdf">
+
+<div class="result">
+
+<p>
+PDF processing modules can be added here:
+merge, split, compress, rotate and page management.
+</p>
+
+</div>
+
+`;
+
+}
+
+}
+
+
+function loadImage(file){
+
+return new Promise((resolve,reject)=>{
+
+const img = new Image();
+
+img.onload = ()=>resolve(img);
+
+img.onerror = reject;
+
+img.src = URL.createObjectURL(file);
+
+});
+
+}
+
+
+async function compressImage(){
+
+const file =
+document.getElementById("compressFile").files[0];
+
+if(!file){
+alert("Choose an image.");
+return;
+}
+
+const img = await loadImage(file);
+
+const canvas = document.createElement("canvas");
+
+canvas.width = img.width;
+canvas.height = img.height;
+
+const ctx = canvas.getContext("2d");
+
+ctx.drawImage(img,0,0);
+
+const quality =
+document.getElementById("quality").value / 100;
+
+canvas.toBlob(blob=>{
+
+const url = URL.createObjectURL(blob);
+
+document.getElementById("compressResult").innerHTML = `
+
+<p>Original: ${(file.size/1024).toFixed(1)} KB</p>
+
+<p>New: ${(blob.size/1024).toFixed(1)} KB</p>
+
+<a href="${url}"
+download="compressed-image.jpg"
+class="action"
+style="display:inline-block;margin-top:10px;">
+Download
+</a>
+
+`;
+
+},"image/jpeg",quality);
+
+}
+
+
+async function resizeImage(){
+
+const file =
+document.getElementById("resizeFile").files[0];
+
+if(!file){
+alert("Choose an image.");
+return;
+}
+
+const img = await loadImage(file);
+
+const width =
+parseInt(document.getElementById("resizeWidth").value);
+
+const height =
+parseInt(document.getElementById("resizeHeight").value);
+
+if(!width || !height){
+alert("Enter width and height.");
+return;
+}
+
+const canvas = document.createElement("canvas");
+
+canvas.width = width;
+canvas.height = height;
+
+canvas.getContext("2d")
+.drawImage(img,0,0,width,height);
+
+const url = canvas.toDataURL("image/png");
+
+document.getElementById("resizeResult").innerHTML = `
+
+<img class="preview" src="${url}">
+
+<a class="action"
+href="${url}"
+download="resized.png">
+Download
+</a>
+
+`;
+
+}
+
+
+async function convertImage(){
+
+const file =
+document.getElementById("convertFile").files[0];
+
+if(!file){
+alert("Choose an image.");
+return;
+}
+
+const img = await loadImage(file);
+
+const canvas = document.createElement("canvas");
+
+canvas.width = img.width;
+canvas.height = img.height;
+
+canvas.getContext("2d").drawImage(img,0,0);
+
+const format =
+document.getElementById("convertFormat").value;
+
+const url =
+canvas.toDataURL(format,0.9);
+
+let extension = "jpg";
+
+if(format.includes("png"))
+extension = "png";
+
+if(format.includes("webp"))
+extension = "webp";
+
+document.getElementById("convertResult").innerHTML = `
+
+<img class="preview" src="${url}">
+
+<a class="action"
+href="${url}"
+download="converted.${extension}">
+Download
+</a>
+
+`;
+
+}
+
+
+async function cropImage(){
+
+const file =
+document.getElementById("cropFile").files[0];
+
+if(!file){
+alert("Choose an image.");
+return;
+}
+
+const img = await loadImage(file);
+
+const width =
+parseInt(document.getElementById("cropWidth").value);
+
+const height =
+parseInt(document.getElementById("cropHeight").value);
+
+if(!width || !height){
+alert("Enter crop dimensions.");
+return;
+}
+
+const canvas =
+document.createElement("canvas");
+
+canvas.width = width;
+canvas.height = height;
+
+canvas.getContext("2d")
+.drawImage(
+img,
+0,
+0,
+width,
+height,
+0,
+0,
+width,
+height
+);
+
+const url =
+canvas.toDataURL("image/png");
+
+document.getElementById("cropResult").innerHTML = `
+
+<img class="preview" src="${url}">
+
+<a class="action"
+href="${url}"
+download="cropped.png">
+Download
+</a>
+
+`;
+
+}
+
+
+async function enhanceImage(){
+
+const file =
+document.getElementById("enhanceFile").files[0];
+
+if(!file){
+alert("Choose an image.");
+return;
+}
+
+const img = await loadImage(file);
+
+const canvas =
+document.createElement("canvas");
+
+canvas.width = img.width;
+canvas.height = img.height;
+
+const ctx = canvas.getContext("2d");
+
+ctx.filter =
+`brightness(${
+document.getElementById("brightness").value
+}%) contrast(${
+document.getElementById("contrast").value
+}%)`;
+
+ctx.drawImage(img,0,0);
+
+const url =
+canvas.toDataURL("image/jpeg",0.95);
+
+document.getElementById("enhanceResult").innerHTML = `
+
+<img class="preview" src="${url}">
+
+<p>
+This is browser-based enhancement.
+AI super-resolution can be added later.
+</p>
+
+<a class="action"
+href="${url}"
+download="enhanced.jpg">
+Download
+</a>
+
+`;
+
+}
+
+
+async function imagesToPDF(){
+
+const files =
+document.getElementById("pdfImages").files;
+
+if(!files.length){
+
+alert("Select images.");
+
+return;
+
+}
+
+const {jsPDF} = window.jspdf;
+
+const pdf = new jsPDF();
+
+for(let i=0;i<files.length;i++){
+
+const img =
+await loadImage(files[i]);
+
+const pageWidth = 190;
+
+const ratio =
+img.height / img.width;
+
+const pageHeight =
+pageWidth * ratio;
+
+if(i > 0)
+pdf.addPage();
+
+pdf.addImage(
+img,
+"JPEG",
+10,
+10,
+pageWidth,
+pageHeight
+);
+
+}
+
+const blob =
+pdf.output("blob");
+
+const url =
+URL.createObjectURL(blob);
+
+document.getElementById("pdfResult").innerHTML = `
+
+<p>PDF created successfully.</p>
+
+<a class="action"
+href="${url}"
+download="images.pdf">
+Download PDF
+</a>
+
+`;
+
+}
+
+
+async function scanDocument(){
+
+const file =
+document.getElementById("scannerFile").files[0];
+
+if(!file){
+
+alert("Take or select a document photo.");
+
+return;
+
+}
+
+const img =
+await loadImage(file);
+
+const canvas =
+document.createElement("canvas");
+
+canvas.width = img.width;
+
+canvas.height = img.height;
+
+const ctx =
+canvas.getContext("2d");
+
+ctx.filter =
+"grayscale(100%) contrast(130%) brightness(110%)";
+
+ctx.drawImage(img,0,0);
+
+const url =
+canvas.toDataURL("image/jpeg",0.95);
+
+document.getElementById("scannerResult").innerHTML = `
+
+<img class="preview" src="${url}">
+
+<p>Document scan prepared.</p>
+
+<a class="action"
+href="${url}"
+download="scanned-document.jpg">
+Download Scan
+</a>
+
+`;
+
+}
+
+
+function generateQR(){
+
+const text =
+document.getElementById("qrText").value;
+
+if(!text){
+
+alert("Enter a link or text.");
+
+return;
+
+}
+
+QRCode.toCanvas(
+document.getElementById("qrCanvas"),
+text,
+{
+width:300,
+margin:2
+},
+function(error){
+
+if(error)
+console.error(error);
+
+});
+
+}
+
+
+function downloadQR(){
+
+const canvas =
+document.getElementById("qrCanvas");
+
+if(!canvas.width){
+
+alert("Generate a QR code first.");
+
+return;
+
+}
+
+const link =
+document.createElement("a");
+
+link.download =
+"qr-code.png";
+
+link.href =
+canvas.toDataURL("image/png");
+
+link.click();
+
+}
+
+
+function removeMetadataDemo(){
+
+document.getElementById("privacyResult").innerHTML = `
+
+<p>
+Privacy processing interface ready.
+</p>
+
+<p>
+For the production version, the file will be processed
+locally or through a secure processing service to remove
+supported metadata.
+</p>
+
+`;
+
+}
+
+
+function converterDemo(){
+
+document.getElementById("converterResult").innerHTML = `
+
+<p>
+Converter interface ready.
+</p>
+
+<p>
+Additional conversion engines can be connected here.
+</p>
+
+`;
+
+}
+
+
+function scrollToSection(id){
+
+document
+.getElementById(id)
+.scrollIntoView({
+behavior:"smooth"
+});
+
+}
+
+</script>
+
+</body>
+      </html>
